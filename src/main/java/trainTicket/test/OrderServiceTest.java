@@ -39,7 +39,6 @@ public class OrderServiceTest {
 		
 		User user = new User();
 		user.setId(3);
-		orderService.buyTicket(user, list.get(0));
 		/*OrderCustom orderCustom = orderService.selectCurrentOrderByUserId(3).get(0);
 		orderService.refundTicket(orderCustom);*/
 	}
