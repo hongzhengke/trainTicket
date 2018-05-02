@@ -13,8 +13,11 @@ public class UserServiceImplTest {
 		ApplicationContext ctx = new ClassPathXmlApplicationContext("classpath:config/spring/application-dao.xml"
 				,"classpath:config/spring/application-service.xml");
 		UserService userService = ctx.getBean(UserService.class);
-		User user = userService.findUserByTelAndPassword("17620059106", "123456");
-		System.out.println(user);
+		/*User user = userService.findUserByTelAndPassword("13416141193", "123456");
+		System.out.println(user);*/
+		User user = new User();
+		user.setTel("13416141193");
+		System.out.println(userService.registerUser(user));
 		
 	}
 

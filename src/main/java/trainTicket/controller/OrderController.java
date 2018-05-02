@@ -1,5 +1,7 @@
 package trainTicket.controller;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,15 +29,17 @@ public class OrderController {
 	}
 
 	@RequestMapping("/buyTicket.action")
-	public @ResponseBody ResponseEntity buyTicket(User user,TicketCustom ticketCustom) {
-		OrderInfo orderInfo = orderService.buyTicket(user, ticketCustom);
+	public @ResponseBody ResponseEntity buyTicket(HttpSession session,TicketCustom ticketCustom) {
+		User user = (User) session.getAttribute("user");
+		OrderInfo orderInfo = orderService.buyTicket(user.getId(), ticketCustom);
 		ResponseEntity responseEntity = new ResponseEntity(orderInfo != null ? "SUCCESS":"FAIL",orderInfo);
 		return responseEntity;
 	}
 	
 	@RequestMapping("queryCurrentOrder.action")
-	public @ResponseBody ResponseEntity queryCurrentOrderByUserId(Integer userId) {
-		return new ResponseEntity("SUCCESS",orderService.selectCurrentOrderByUserId(userId));
+	public @ResponseBody ResponseEntity queryCurrentOrder(HttpSession session) {
+		User user = (User) session.getAttribute("user");
+		return new ResponseEntity("SUCCESS",orderService.selectCurrentOrderByUserId(user.getId()));
 	}
 	
 	@RequestMapping("refundTicket.action")
