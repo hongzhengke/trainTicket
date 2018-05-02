@@ -6,16 +6,21 @@
         <title>登录</title>
     </head>
     <body>
-        <div class="form" id="form">
-            <div class="tab">
-                <div class="tab-block">登录</div>
-                <div class="tab-block">注册</div>
+        <div class="window">
+            <h1>火车售票系统</h1>
+            <div class="form" id="form" v-cloak>
+                <div class="tab" @click="switchTab">
+                    <div :class="login_class" name="login">登录</div>
+                    <div :class="signin_class" name="signin" >注册</div>
+                </div>
+                <input type="text" name="tel" placeholder="请输入手机号" v-model="tel" autofocus>
+                <input type="text" name="userName" placeholder="请输入用户名" value="" v-model="name" v-show="compute_show">
+                <input type="password" name="userPassword" value="" placeholder="请输入密码" v-model="password">
+                <button type="button" name="submit" @click="submit">{{compute_action}}</button>
             </div>
-            <input type="text" placeholder="请输入用户名" v-model="name">
-            <input type="password" name="" value="" placeholder="请输入密码" v-model="password">
-            <button type="button" name="submit">登录</button>
         </div>
-        <script type="text/javascript" src="asset/node_modules/vue/dist/vue.js"></script>
-        <script type="text/javascript" src="asset/js/login.js"</script>
+        <script type="text/javascript" src="node_modules/vue/dist/vue.js"></script>
+        <script type="text/javascript" src="asset/js/globalFun.js"></script>
+        <script type="text/javascript" src="asset/js/login.js"></script>
     </body>
 </html>

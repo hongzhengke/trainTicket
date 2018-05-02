@@ -1,0 +1,55 @@
+html,body{
+    height: 100%;
+    width: 100%;
+    margin: 0;
+}
+.wrapper{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+.header{
+    display: flex;
+    flex-direction: row;
+    height: 150px;
+    width: 100%;
+    background-color: ;
+}
+.header .info{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
+    border-right: 1px solid black;
+    flex: 1 0 20%;
+}
+.header .menu{
+    border-right: 1px solid black;
+    flex: 1 0 50%;
+}
+.header .aboutMe{
+    flex: 1 0 20%;
+}
+.header .title{
+    flex: 2 0 auto;
+    font-family: fantasy;
+    font-size: 30px;
+    color: rgb(35, 72, 231);
+    text-shadow: 1px 1px #0875b3;
+}
+.header .time{
+    flex: 1 0 auto;
+    text-align: center;
+}
+
+.footer{
+    height: 100px;
+    width: 100%;
+    background-color: rgb(150, 45, 200);
+}
+.content{
+    height: 80px;
+    width: 100%;
+    flex: 1 0 80%;
+}
