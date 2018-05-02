@@ -29,6 +29,8 @@ public class UserController {
 		ResponseEntity responseEntity = new ResponseEntity();
 		if(user != null) {
 			session.setAttribute("user", user);
+			responseEntity.setMessage("SUCCESS");
+		}else {
 			responseEntity.setMessage("FAIL");
 		}
 		responseEntity.setData(user);
