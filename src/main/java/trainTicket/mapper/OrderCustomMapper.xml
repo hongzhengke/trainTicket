@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="trainTicket.mapper.OrderCustomMapper">
+
+	<resultMap type="trainTicket.po.OrderCustom" id="orderCustomResultMap">
+		<association property="orderInfo" javaType="trainTicket.po.OrderInfo">
+			<id column="order_info_id" property="id"/>
+			<result column="order_time" property="orderTime"/>
+			<result column="ticket_info_id" property="ticketInfoId"/>
+			<result column="carriage_number" property="carriageNumber"/>
+			<result column="seat_number" property="seatNumber"/>
+			<result column="user_id" property="userId"/>
+		</association>
+		<association property="ticketInfo" javaType="trainTicket.po.TicketInfo">
+			<id column="ticket_info_id" property="id"/>
+			<result column="departure_date" property="departureDate"/>
+			<result column="train_info_id" property="trainInfoId"/>
+			<result column="ticket_amount" property="ticketAmount"/>
+		</association>
+		<association property="trainInfo" javaType="trainTicket.po.TrainInfo">
+			<id column="train_info_id" property="id"/>
+			<result column="code" property="code"/>
+			<result column="departure_place" property="departurePlace"/>
+			<result column="destination_place" property="destinationPlace"/>
+			<result column="duration" property="duration"/>
+			<result column="departure_time" property="departureTime"/>
+			<result column="seat_amount" property="seatAmount"/>
+			<result column="carriage_amount" property="carriageAmount"/>
+		</association>
+	</resultMap>
+	
+	<select id="selectOrderByUserIdAndTime" parameterType="trainTicket.po.UserCustom" 
+	resultMap="orderCustomResultMap">
+		SELECT * ,order_info.id order_info_id
+		FROM user,order_info,ticket_info,train_info
+		WHERE user.id=user_id AND ticket_info_id=ticket_info.id	AND train_info_id=train_info.id 
+		AND user.id=#{userId} 
+		AND 
+		(departure_date>#{currentDate} OR (departure_date=#{currentDate} AND departure_time >= #{currentTime}))
+	</select>
+	
+</mapper>

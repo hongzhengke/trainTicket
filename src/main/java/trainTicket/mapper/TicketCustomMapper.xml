@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="trainTicket.mapper.TicketCustomMapper">
+
+	<resultMap type="trainTicket.po.TicketCustom" id="TicketCustomResultMap">
+		<association property="trainInfo" javaType="trainTicket.po.TrainInfo">
+			<id column="train_info_id" property="id"/>
+			<result column="code" property="code"/>
+			<result column="departure_place" property="departurePlace"/>
+			<result column="destination_place" property="destinationPlace"/>
+			<result column="duration" property="duration"/>
+			<result column="departure_time" property="departureTime"/>
+			<result column="seat_amount" property="seatAmount"/>
+			<result column="carriage_amount" property="carriageAmount"/>
+		</association>
+		<association property="ticketInfo" javaType="trainTicket.po.TicketInfo">
+			<id column="ticket_info_id" property="id"/>
+			<result column="train_info_id" property="trainInfoId"/>
+			<result column="departure_date" property="departureDate"/>
+			<result column="ticket_amount" property="ticketAmount"/>
+		</association>
+	</resultMap>
+
+	
+	<select id="selectTicket" parameterType="trainTicket.po.TicketCustom" resultMap="TicketCustomResultMap">
+		SELECT *,ticket_info.id ticket_info_id
+		FROM train_info,ticket_info
+		WHERE departure_place=#{trainInfo.departurePlace}
+		AND destination_place=#{trainInfo.destinationPlace} 
+		AND ticket_info.departure_date=#{ticketInfo.departureDate}
+		AND train_info.departure_time>=#{trainInfo.departureTime}
+	</select>
+
+	<insert id="insertBatchTicketInfo" parameterType="java.util.List" useGeneratedKeys="true"
+	 keyProperty="id">
+		INSERT INTO ticket_info(train_info_id,departure_date,ticket_amount) VALUES
+		<foreach collection="list" item="item" separator=",">
+			(#{item.trainInfoId},#{item.departureDate},#{item.ticketAmount})
+		</foreach>
+	</insert>
+	
+</mapper>

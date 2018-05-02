@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="trainTicket.mapper.SeatInfoCustomMapper">
+	<insert id="insertBatch" parameterType="java.util.List">
+		INSERT INTO seat_info(ticket_info_id,carriage_number,seat_number) VALUES
+		<foreach collection="list" item="item" separator=",">
+			(#{item.ticketInfoId},#{item.carriageNumber},#{item.seatNumber})
+		</foreach>
+	</insert>
+	
+	<select id="selectOneSeatByTicketId" parameterType="int" resultType="trainTicket.po.SeatInfo">
+		SELECT *
+		FROM seat_info
+		WHERE ticket_info_id=#{value}
+		LIMIT 1
+	</select>
+	
+	
+</mapper>
