@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	
+	<!-- 设置自动进行驼峰命名映射 -->
+	<settings>
+		<setting name="logImpl" value="LOG4J" />  
+		<setting name="mapUnderscoreToCamelCase" value="true"/>
+	</settings>
+
+	<!-- 配置别名 -->
+	<typeAliases>
+		<package name="ssm.po"/>
+	</typeAliases>
+
+</configuration>

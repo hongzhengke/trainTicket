@@ -3,8 +3,8 @@ var vm = new Vue({
     data: {
         tel: "",
         password: "",
-        action: "login",
         name: "",
+        action: "login",
         login_class:{
             tab_block: true,
             chosen: true,
@@ -27,27 +27,45 @@ var vm = new Vue({
                 }else if(password === ""){
                     displayMessage("密码不能为空");
                 }else{
-                    let ajax = getAjax("get", "/login.action", {tel,password}, );
+                    let ajax = getAjax("get", "/trainTicket/login.action", {tel,password}, );
+                    displayLoading();
                     ajax.then(
                         (responseText) => {
-                            displayMessage("登录成功！" + responseText);
+                            cancelLoading();
+                            var data = JSON.parse(responseText);
+                            if(data.message === "SUCCESS"){
+                                displayMessage("登录成功！" + responseText);
+                                location.href = "main.html";
+                            }else{
+                                displayMessage("登录失败！");
+                            }
                         },
                         (responseText) =>{
-                            displayMessage("登录失败！" + responseText);
+                            cancelLoading();
+                            displayMessage("登录失败！");
                         },
                     )
                 }
-            }else if(vm.action === "register"){
+            }else if(vm.action === "signin"){
+                console.log(vm);
                 let tel = vm.tel.trim();
-                let userName = vm.userName.trim();
+                let name = vm.name.trim();
                 let password = vm.password.trim();
-                let ajax = getAjax("get", "/login.action", {tel,name: name,password}, );
+                let ajax = getAjax("get", "/trainTicket/register.action", {tel, name, password}, );
+                displayLoading();
                 ajax.then(
                     (responseText) => {
-                        displayMessage("注册成功！" + responseText);
-                        vm.action = "signin";
+                        cancelLoading();
+                        var data = JSON.parse(responseText);
+                        if(data.message === "SUCCESS"){
+                            displayMessage("注册成功！");
+                            vm.action = "login";
+                        }else{
+                            displayMessage("注册失败！");
+                        }
                     },
                     (responseText) =>{
+                        cancelLoading();
                         displayMessage("注册失败！" + responseText);
                     },
                 )

@@ -1,0 +1,49 @@
+.html .body{
+    height: 100%;
+}
+.form{
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    min-width: 200px;
+    width: 30%;
+    max-width: 250px;
+    min-height: 300px;
+    height: 40%;
+    max-height: 600px;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    border: 1px solid black;
+}
+.form input{
+    height: 1.5em;
+    margin-top: 3em;
+    width: 80%;
+}
+.form button{
+    height: 2em;
+    margin: 2em 0;
+    width: 60%;
+}
+.tab{
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    justify-content: center;
+}
+.tab-block{
+    flex: 1 0 50%;
+    text-align: center;
+    border-bottom: 1px solid black;
+    font-size: 20px;
+    color: rgb(31, 181, 246);
+}
+.tab>.tab-block:first-child{
+    border-right: 0.5px solid gray;
+}
+.tab>.tab-block:last-child{
+    border-left: 0.5px solid gray;
+}
