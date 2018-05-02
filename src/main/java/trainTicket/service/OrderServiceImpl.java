@@ -90,7 +90,7 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	@Transactional
-	public OrderInfo buyTicket(User user, TicketCustom ticketCustom) {
+	public OrderInfo buyTicket(Integer userId, TicketCustom ticketCustom) {
 		TicketInfo ticketInfo = ticketCustom.getTicketInfo();
 		OrderInfo orderInfo = null;
 		//找出所有对应的座位信息
@@ -100,7 +100,7 @@ public class OrderServiceImpl implements OrderService {
 			orderInfo.setSeatNumber(seatInfo.getSeatNumber());
 			orderInfo.setCarriageNumber(seatInfo.getCarriageNumber());
 			orderInfo.setOrderTime(new Date());
-			orderInfo.setUserId(user.getId());
+			orderInfo.setUserId(userId);
 			orderInfo.setTicketInfoId(ticketInfo.getId());
 			//修改数据库
 			seatInfoMapper.deleteByPrimaryKey(seatInfo.getId());

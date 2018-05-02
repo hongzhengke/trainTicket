@@ -15,7 +15,7 @@ public interface OrderService {
 	 * @param ticketCustom
 	 * @return
 	 */
-	public OrderInfo buyTicket(User user,TicketCustom ticketCustom);
+	public OrderInfo buyTicket(Integer userId,TicketCustom ticketCustom);
 	/**
 	 * 详细列出当前用户已购买且未到发车时间的车票；
 	 * @param user
