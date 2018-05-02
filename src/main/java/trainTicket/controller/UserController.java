@@ -45,6 +45,7 @@ public class UserController {
 	
 	@RequestMapping("/register.action")
 	public @ResponseBody ResponseEntity register(User user) {
+		user.setAuthority(1);
 		if(userService.registerUser(user) == false) {
 			return new ResponseEntity("FAIL", null);
 		}
