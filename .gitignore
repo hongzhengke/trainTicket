@@ -3,3 +3,4 @@ target
 .classpath
 .project
 .springBeans
+src\main\resources\config\db.properties
