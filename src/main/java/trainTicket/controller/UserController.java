@@ -53,4 +53,9 @@ public class UserController {
 			return new ResponseEntity("SUCCESS", user);
 		}
 	}
+	
+	@RequestMapping("/getUser.action")
+	public @ResponseBody ResponseEntity getUserBySession(HttpSession session) {
+		return new ResponseEntity("SUCCESS",session.getAttribute("user"));
+	}
 }
