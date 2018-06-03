@@ -5,3 +5,4 @@ target
 .springBeans
 db.properties
 /bin/
+node_modules
