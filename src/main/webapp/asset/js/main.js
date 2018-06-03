@@ -28,11 +28,18 @@ var ticket = {
     return {
       dateList: [],
       selectedIndex: 0,
+      departure: '广州',
+      destination: '揭阳',
+      departureTime: '',
     };
   },
   methods: {
     select(index) {
       this.selectedIndex = index;
+    },
+    getDepartureDate() {
+      var selectedDate = this.dateList[this.selectedIndex];
+      return `${selectedDate.year}-${selectedDate.month}-${selectedDate.date} 00:00:00`;
     },
   },
   created() {
@@ -40,12 +47,23 @@ var ticket = {
     var inc = 1000 * 60 * 60 * 24;
     for (var i = 0; i < 15; i++) {
       this.dateList.push({
-        year: date.getYear(),
+        year: date.getFullYear(),
         month: date.getMonth() + 1,
         date: date.getDate(),
       });
       date.setTime(date.getTime() + inc);
     }
+    getAjax('get', '/trainTicket/queryTicket.action', {
+      'trainInfo.departurePlace': this.departure,
+      'trainInfo.destinationPlace': this.destination,
+      'ticketInfo.departureDate': this.getDepartureDate(),
+      'trainInfo.departureTime': `0000-00-00 00:00:00`,
+    }).then(responseText => {
+      var data = JSON.parse(responseText);
+      if (data.message === 'SUCCESS') {
+        console.log(data.data);
+      }
+    });
   },
 };
 var order = {
