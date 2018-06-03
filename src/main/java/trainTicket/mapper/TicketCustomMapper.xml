@@ -26,6 +26,7 @@
 		SELECT *,ticket_info.id ticket_info_id
 		FROM train_info,ticket_info
 		WHERE departure_place=#{trainInfo.departurePlace}
+		AND train_info.id = ticket_info.train_info_id
 		AND destination_place=#{trainInfo.destinationPlace} 
 		AND ticket_info.departure_date=#{ticketInfo.departureDate}
 		AND train_info.departure_time>=#{trainInfo.departureTime}

@@ -16,7 +16,7 @@ public class TrainServiceTest {
 		TrainService trainService = ctx.getBean(TrainService.class);
 		TicketService ticketService = ctx.getBean(TicketService.class);
 		
-		TrainInfo trainInfo = new TrainInfo();
+		/*TrainInfo trainInfo = new TrainInfo();
 		trainInfo.setCode("G666");
 		trainInfo.setDeparturePlace("广州");
 		trainInfo.setDepartureTime(new Date(0,0,0,12,0,0));
@@ -24,8 +24,8 @@ public class TrainServiceTest {
 		trainInfo.setDuration(10800);
 		trainInfo.setSeatAmount(50);
 		trainInfo.setCarriageAmount(3);
-		trainService.addTrainInfo(trainInfo);
-		/*ticketService.autoInsertTicketForAllTrain();
-		trainService.deleteTrainInfo(19);*/
+		trainService.addTrainInfo(trainInfo);*/
+		ticketService.autoInsertTicketForAllTrain();
+	//	trainService.deleteTrainInfo(19);
 	}
 }
