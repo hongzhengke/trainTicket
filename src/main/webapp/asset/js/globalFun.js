@@ -42,3 +42,11 @@ function getAjax(method, path, requestParams, requestHeader){
 function displayMessage(message){
     alert(message);
 }
+function displayLoading(){
+    let loading = document.querySelector(".loading");
+    loading.style.visibility = "visible";
+}
+function cancelLoading(){
+    let loading = document.querySelector(".loading");
+    loading.style.visibility = "hidden";
+}

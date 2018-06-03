@@ -1,0 +1,44 @@
+.CommonTitle {
+  text-align: center;
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 50px;
+}
+.query {
+  .title {
+    @extend .CommonTitle;
+  }
+  .search {
+    padding-left: 50px;
+    select {
+      margin: 0 10px;
+    }
+    .dateList {
+      font-size: 0px;
+      padding-top: 20px;
+      .dateBlock {
+        display: inline-block;
+        text-align: center;
+        font-size: 18px;
+        height: 30px;
+        width: 60px;
+        background: rgba($color: #999, $alpha: 0.2);
+        border: 1px solid gray;
+        &:hover {
+          width: 80px;
+          background: rgba($color: #999, $alpha: 0.3);
+          cursor: pointer;
+        }
+        &.selected {
+          background: rgba($color: #999, $alpha: 0.4);
+        }
+      }
+    }
+  }
+}
+
+.order {
+  .title {
+    @extend .CommonTitle;
+  }
+}

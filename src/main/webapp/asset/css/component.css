@@ -1,0 +1,39 @@
+.CommonTitle, .query .title, .order .title {
+  text-align: center;
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 50px;
+}
+
+.query .search {
+  padding-left: 50px;
+}
+
+.query .search select {
+  margin: 0 10px;
+}
+
+.query .search .dateList {
+  font-size: 0px;
+  padding-top: 20px;
+}
+
+.query .search .dateList .dateBlock {
+  display: inline-block;
+  text-align: center;
+  font-size: 18px;
+  height: 30px;
+  width: 60px;
+  background: rgba(153, 153, 153, 0.2);
+  border: 1px solid gray;
+}
+
+.query .search .dateList .dateBlock:hover {
+  width: 80px;
+  background: rgba(153, 153, 153, 0.3);
+  cursor: pointer;
+}
+
+.query .search .dateList .dateBlock.selected {
+  background: rgba(153, 153, 153, 0.4);
+}

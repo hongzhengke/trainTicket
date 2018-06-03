@@ -1,37 +1,58 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-    <head>
-        <meta charset="utf-8">
-        <title>火车售票系统</title>
-        <link rel="stylesheet" href="asset/css/main.css">
-    </head>
-    <body>
-        <div class="wrapper">
-            <div class="header">
-                <div class="info">
-                    <div class="title">
-                        广东211公司
-                    </div>
-                    <div class="time">
-                        北京时间18/5/2 11:19:59
-                    </div>
-                </div>
-                <div class="menu">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
-                <div class="aboutMe">
 
+<head>
+    <meta charset="utf-8">
+    <title>火车售票系统</title>
+    <link rel="stylesheet" href="asset/css/main.css">
+    <link rel="stylesheet" href="asset/css/component.css">
+</head>
+
+<body>
+    <div class="wrapper" v-cloak>
+        <div class="header">
+            <div class="info">
+                <div class="title">
+                    广东211公司
+                </div>
+                <div class="time">
+                    {{time}}
                 </div>
             </div>
-            <div class="content">
-
+            <div class="menu">
+                <router-link to="/ticket">余票查询</router-link>
+                <router-link v-bind:to="'/order/'+info.id" v-if="identity==='user'">我的订单</router-link>
+                <router-link to="/manage" v-if="identity==='manager'">班次管理</router-link>
             </div>
-            <div class="footer">
-
+            <div class="aboutMe" @click="toggle" @mouseenter="mouseenter" @mouseleave="mouseleave">
+                <div class="userInfo">{{info.authority===0?"管理员":"用户"}}： {{info.name}}</div>
+                <ul class="more">
+                    <div v-if="identity==='user'">
+                        <router-link v-bind:to="'/order/'+info.id">我的订单</router-link>
+                    </div>
+                    <div v-if="identity==='visitor'">
+                        <a href="login.html">登录</a>
+                    </div>
+                    <div v-if="identity!=='visitor'">
+                        <a href="" @click="logout">退出当前账号</a>
+                    </div>
+                </ul>
             </div>
         </div>
-    </body>
+        <div class="content">
+            <router-view></router-view>
+        </div>
+        <div class="footer">
+            <span>版权所有 ©2018 广东211信息技术部</span>
+        </div>
+    </div>
+    <div class="loading">
+        <img src="asset/image/loading.gif" alt="加载中...">
+    </div>
+    <script type="text/javascript" src="node_modules/vue/dist/vue.js"></script>
+    <script type="text/javascript" src="node_modules/vue-router/dist/vue-router.js"></script>
+    <script type="text/javascript" src="asset/js/globalFun.js"></script>
+    <script type="text/javascript" src="asset/js/main.js"></script>
+</body>
+
 </html>
