@@ -34,7 +34,6 @@ var vm = new Vue({
                             cancelLoading();
                             var data = JSON.parse(responseText);
                             if(data.message === "SUCCESS"){
-                                displayMessage("登录成功！" + responseText);
                                 location.href = "main.html";
                             }else{
                                 displayMessage("登录失败！");
@@ -47,7 +46,6 @@ var vm = new Vue({
                     )
                 }
             }else if(vm.action === "signin"){
-                console.log(vm);
                 let tel = vm.tel.trim();
                 let name = vm.name.trim();
                 let password = vm.password.trim();
@@ -66,7 +64,8 @@ var vm = new Vue({
                     },
                     (responseText) =>{
                         cancelLoading();
-                        displayMessage("注册失败！" + responseText);
+                        console.log(responseText);
+                        displayMessage("注册失败！");
                     },
                 )
             }
