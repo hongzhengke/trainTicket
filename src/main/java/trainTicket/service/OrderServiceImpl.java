@@ -91,7 +91,8 @@ public class OrderServiceImpl implements OrderService {
 
 	@Transactional
 	public OrderInfo buyTicket(Integer userId, TicketCustom ticketCustom) {
-		TicketInfo ticketInfo = ticketCustom.getTicketInfo();
+	//	TicketInfo ticketInfo = ticketCustom.getTicketInfo();
+		TicketInfo ticketInfo = ticketInfoMapper.selectByPrimaryKey(ticketCustom.getTicketInfo().getId());
 		OrderInfo orderInfo = null;
 		//找出所有对应的座位信息
 		SeatInfo seatInfo = seatInfoCustomMapper.selectOneSeatByTicketId(ticketInfo.getId());
