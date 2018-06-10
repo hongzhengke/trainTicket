@@ -32,7 +32,7 @@ function getAjax(method, path, requestParams, requestHeader) {
       }
       postData = data;
     }
-    ajax.open(method, 'http://172.16.31.101:8080' + path);
+    ajax.open(method, path);
     for (var key in requestHeader) {
       ajax.setRequestHeader(key, requestHeader[key]);
     } //必须在open和send之间调用!

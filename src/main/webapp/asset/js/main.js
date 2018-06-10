@@ -25,6 +25,8 @@ var ticket = {
                     <option>韶关</option>
                     <option>潮汕</option>
                     <option>深圳</option>
+                    <option>珠海</option>
+                    <option>湛江</option>
                 </select>
                 <label for="departureTime">发车时间</label>
                 <select id="departureTime" v-model="departureTime">
@@ -104,19 +106,22 @@ var ticket = {
               arr.forEach(ele => {
                 var object = {};
                 for (var key in this.dict) {
-                  if (ele.ticketInfo[key]) {
+                  if (ele.ticketInfo[key] !== undefined) {
                     object[this.dict[key]] = ele.ticketInfo[key];
-                  } else if (ele.trainInfo[key]) {
+                  } else if (ele.trainInfo[key] !== undefined) {
                     object[this.dict[key]] = ele.trainInfo[key];
                   }
                 }
+
                 object['出发日期'] = stringifyDate('Y-M-D', new Date(object['出发日期']));
                 object['出发时间'] = stringifyDate('h:m', new Date(object['出发时间']));
-                object['时长'] = parseInt(object['时长'] / 60) + '分钟';
+                object['时长'] =
+                  parseInt(object['时长'] / 3600) + '小时' + parseInt((object['时长'] / 60) % 60) + '分钟';
                 object.ID = ele.ticketInfo.id;
                 temp.push(object);
               });
               this.data = temp;
+              console.log(this.data);
             }
           } else {
             alert('加载失败');
@@ -147,7 +152,7 @@ var ticket = {
   created() {
     var date = new Date();
     var inc = 1000 * 60 * 60 * 24;
-    for (var i = 0; i < 15; i++) {
+    for (var i = 0; i < 10; i++) {
       this.dateList.push({
         year: date.getFullYear(),
         month: date.getMonth() + 1,
@@ -175,13 +180,13 @@ var order = {
             <div class="title">我的订单</div>
             <div class="table" v-if="data.length > 0">
               <div class="table-head">
-                <div v-for="(val, key) in data[0]" :key=key  v-if="key!='ID'" class="th td">{{key}}</div>
+                <div v-for="(val, key) in data[0]" :key=key  v-if="key!='ID'&&key!='订单号'" class="th td">{{key}}</div>
                 <div class="th td">订票按钮</div>
               </div>
               <div v-for="item in data" :key="item.ID"  class="table-content">
-                <div v-for="(val, key) in item" :key=key v-if="key!='ID'" class="td">{{val}}</div>
+                <div v-for="(val, key) in item" :key=key v-if="key!='ID'&&key!='订单号'" class="td">{{val}}</div>
                 <div class="td">
-                  <div class="button" @click="refund(item.ID,item['车厢号'],item['座位号'])">退票</div>
+                  <div class="button" @click="refund(item.ID,item['订单号'])">退票</div>
                 </div>
               </div>
             </div>
@@ -212,10 +217,9 @@ var order = {
       getAjax('get', '/trainTicket/queryCurrentOrder.action').then(
         responseText => {
           var data = JSON.parse(responseText);
-          console.log(data);
 
           if (data.data.length <= 0) {
-            alert('搜索结果为空！');
+            alert('订单结果为空！');
             this.data = [];
           } else {
             var temp = [];
@@ -223,19 +227,20 @@ var order = {
             arr.forEach(ele => {
               var object = {};
               for (var key in this.dict) {
-                if (ele.ticketInfo[key]) {
+                if (ele.ticketInfo[key] !== undefined) {
                   object[this.dict[key]] = ele.ticketInfo[key];
-                } else if (ele.trainInfo[key]) {
+                } else if (ele.trainInfo[key] !== undefined) {
                   object[this.dict[key]] = ele.trainInfo[key];
-                } else if (ele.orderInfo[key]) {
+                } else if (ele.orderInfo[key] !== undefined) {
                   object[this.dict[key]] = ele.orderInfo[key];
                 }
               }
               object['出发日期'] = stringifyDate('Y-M-D', new Date(object['出发日期']));
               object['出发时间'] = stringifyDate('h:m', new Date(object['出发时间']));
               object['订票时间'] = stringifyDate('M-D h:m', new Date(object['订票时间']));
-              object['时长'] = parseInt(object['时长'] / 60) + '分钟';
+              object['时长'] = parseInt(object['时长'] / 3600) + '小时' + parseInt((object['时长'] / 60) % 60) + '分钟';
               object.ID = ele.ticketInfo.id;
+              object['订单号'] = ele.orderInfo.id;
               temp.push(object);
             });
             this.data = temp;
@@ -248,15 +253,13 @@ var order = {
         }
       );
     },
-    refund(id, cnum, snum) {
+    refund(id, orderInfoId) {
       displayLoading();
       getAjax('get', '/trainTicket/refundTicket.action', {
         'ticketInfo.id': id,
-        'orderInfo.carriageNumber': cnum,
-        'orderInfo.seatNumber': snum,
+        'orderInfo.id': orderInfoId,
       }).then(
         responseText => {
-          console.log(JSON.parse(responseText));
           alert(`退票成功! `);
           cancelLoading();
           this.getData();
@@ -271,8 +274,167 @@ var order = {
 };
 var manage = {
   template: `
-        <h1>管理班次 </h1>
+      <div class="manage">
+        <div class="title">管理班次</div>
+          <div class="table" v-if="data.length > 0">
+            <div class="table-head">
+              <div v-for="(val, key) in data[0]" :key=key  v-if="key!='id'" class="th td">{{dict[key]}}</div>
+              <div class="th td">操作</div>
+            </div>
+            <div v-for="(item, index) in data" :key="item.id"  class="table-content">
+              <div v-for="(val, key) in item" :key=key v-if="key!='id'" class="td" @click="edit(item.id, key, $event)">
+                <span v-show="item.id !== editor.row || key !== editor.key">{{val}}</span>
+                <input v-show="item.id === editor.row && key === editor.key" v-model.lazy="item[key]" @blur="update(index)" />
+              </div>
+              <div class="td">
+                <div class="button" @click="remove(item.id)">删除</div>
+              </div>
+            </div>
+            <div class="table-content">
+              <div v-for="(val, key) in newItem" :key=key  class="td newTd" >
+                <input v-model="newItem[key]" :placeholder="newText[key]"/>
+              </div>
+              <div class="td">
+                <div class="addButton button" @click="add()">新增</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     `,
+  data() {
+    return {
+      data: [],
+      dict: {
+        departureTime: '出发时间',
+        departurePlace: '出发地',
+        destinationPlace: '目的地',
+        code: '编号',
+        duration: '时长',
+        carriageAmount: '车厢数',
+        seatAmount: '座位数',
+        id: 'ID',
+      },
+      editor: {
+        row: -1,
+        key: '',
+      },
+      newText: {
+        code: '编号',
+        departurePlace: '出发地',
+        destinationPlace: '目的地',
+        duration: '时长',
+        carriageAmount: '车厢数',
+        seatAmount: '座位数',
+        departureTime: '出发时间',
+      },
+      newItem: {
+        code: 'G***',
+        departurePlace: '广州',
+        destinationPlace: '揭阳',
+        duration: '3小时0分钟',
+        carriageAmount: '3',
+        seatAmount: '50',
+        departureTime: '8:00',
+      },
+    };
+  },
+  created() {
+    this.getData();
+  },
+  methods: {
+    getData() {
+      displayLoading();
+      getAjax('get', '/trainTicket/queryForAllTrainInfo.action').then(
+        responseText => {
+          var data = JSON.parse(responseText);
+          if (data.data.length <= 0) {
+            alert('车次结果为空！');
+            this.data = [];
+          } else {
+            var arr = data.data;
+            arr.forEach(ele => {
+              ele['departureTime'] = stringifyDate('h:m', new Date(ele['departureTime']));
+              ele['duration'] =
+                parseInt(ele['duration'] / 3600) + '小时' + parseInt((ele['duration'] / 60) % 60) + '分钟';
+            });
+            this.data = arr;
+          }
+          cancelLoading();
+        },
+        () => {
+          alert('查询失败!');
+          cancelLoading();
+        }
+      );
+    },
+    update(index) {
+      displayLoading();
+      getAjax('get', '/trainTicket/updateTrainInfo.action', this.process(this.data[index])).then(
+        responseText => {
+          alert('修改信息成功!');
+          cancelLoading();
+          this.editor.row = -1;
+        },
+        () => {
+          alert('修改信息失败!');
+          this.editor.row = -1;
+          cancelLoading();
+        }
+      );
+    },
+    process(data) {
+      var match = data.duration.toString().match(/(\d*)小时(\d*)分钟/);
+      var duration = (match[1] * 60 + parseInt(match[2])) * 60;
+      var departureTime = `0000-00-00 ${data.departureTime}:00`;
+      var object = Object.assign({}, data, {
+        duration,
+        departureTime,
+      });
+      return object;
+    },
+    add() {
+      displayLoading();
+      getAjax('get', '/trainTicket/addTrainInfo.action', this.process(this.newItem)).then(
+        responseText => {
+          alert('新增班次成功!');
+          this.getData();
+          cancelLoading();
+        },
+        () => {
+          alert('新增班次失败!');
+          cancelLoading();
+        }
+      );
+    },
+    remove(id) {
+      displayLoading();
+      getAjax('get', '/trainTicket/deleteTrainInfo.action', { trainInfoId: id }).then(
+        responseText => {
+          alert('删除班次成功!');
+          this.getData();
+          cancelLoading();
+        },
+        () => {
+          alert('删除班次失败!');
+          cancelLoading();
+        }
+      );
+    },
+    edit(row, key, event) {
+      this.editor.row = row;
+      this.editor.key = key;
+      var input = event.currentTarget.querySelector('input');
+      console.log(input);
+      setTimeout(() => input.focus(), 0);
+    },
+  },
+  watch: {
+    data: {
+      handler() {},
+      deep: true,
+    },
+  },
 };
 var router = new VueRouter({
   routes: [
