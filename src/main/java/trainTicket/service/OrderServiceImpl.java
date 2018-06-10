@@ -126,8 +126,8 @@ public class OrderServiceImpl implements OrderService {
 
 	@Transactional
 	public boolean refundTicket(OrderCustom orderCustom) {
-		OrderInfo orderInfo = orderCustom.getOrderInfo();
-		//TicketInfo ticketInfo = orderCustom.getTicketInfo();
+		//OrderInfo orderInfo = orderCustom.getOrderInfo();
+		OrderInfo orderInfo = orderInfoMapper.selectByPrimaryKey(orderCustom.getOrderInfo().getId());
 		TicketInfo ticketInfo = ticketInfoMapper.selectByPrimaryKey(orderCustom.getTicketInfo().getId());
 		//找出所有对应的车厢信息
 		SeatInfo seatInfo = new SeatInfo();
