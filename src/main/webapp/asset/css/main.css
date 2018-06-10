@@ -145,7 +145,7 @@ body {
 }
 .content {
   width: 100%;
-  min-width: 300px;
+  min-width: 1200px;
   flex: 1 0 auto;
 }
 
